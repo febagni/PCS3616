@@ -1,0 +1,36 @@
+ATM
+PCS 2302/2024 X+Y, soma 2 numeros unarios (formato 1.2)
+1 # $   //alfabeto de entrada: $ eh inicio da fita, # eh o separador
+1 B # $ X Y //alfabeto da fita: B eh branco (default)
+1   //numero de fitas
+1   //numero de trilhas na fita 0
+2   //fita 0 eh infinita nas duas direcoes
+q0  //estado inicial
+q10 //estado final 
+q0 $ q1 $ R
+q1 1 q2 X R
+q1 # q4 # R
+q2 # q2 # R
+q2 1 q2 1 R
+q2 B q3 1 L
+q3 # q3 # L
+q3 1 q3 1 L
+q3 X q1 X R
+q4 1 q5 Y R
+q4 # q7 # R
+q5 # q5 # R
+q5 1 q5 1 R
+q5 B q6 1 L
+q6 1 q6 1 L
+q6 # q6 # L
+q6 Y q4 Y R
+q7 1 q7 1 R
+q7 B q8 B L
+q8 1 q9 B L
+q8 # q9 # L
+q9 # q9 # L
+q9 Y q9 1 L
+q9 X q9 1 L
+q9 1 q9 1 L
+q9 $ q10 $ R
+end

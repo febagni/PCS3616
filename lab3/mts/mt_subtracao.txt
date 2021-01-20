@@ -1,0 +1,49 @@
+ATM
+PCS 2302/2024 X-Y, subtracao 2 numeros unarios 
+1 # $   //alfabeto de entrada: $ eh inicio da fita, # eh o separador
+1 B # $ X Y P//alfabeto da fita: B eh branco (default)
+1   //numero de fitas
+1   //numero de trilhas na fita 0
+2   //fita 0 eh infinita nas duas direcoes
+q0  //estado inicial
+q14 //estado final 
+q0 $ q1 $ R
+q1 1 q1 1 R
+q1 # q1 # R
+q1 B q2 # R
+q2 B q3 P L
+q3 1 q3 1 L
+q3 # q3 # L
+q3 $ q4 $ R
+q4 1 q5 X R
+q4 # q7 # R
+q5 P q5 P R
+q5 1 q5 1 R
+q5 # q5 # R
+q5 B q6 1 L
+q6 P q6 P L
+q6 1 q6 1 L
+q6 # q6 # L
+q6 X q4 X R
+q7 1 q8 Y R
+q7 # q12 # R
+q8 P q8 P R
+q8 1 q8 1 R
+q8 # q8 # R
+q8 B q9 B L
+q9 1 q10 B L
+q9 P q11 P L
+q10 P q10 P L
+q10 1 q10 1 L
+q10 # q10 # L
+q10 Y q7 Y R
+q12 P q12 P R
+q12 1 q12 1 R
+q12 B q13 B L
+q13 P q13 1 L
+q13 1 q13 1 L
+q13 # q13 # L
+q13 X q13 1 L
+q13 Y q13 1 L
+q13 $ q14 $ R
+end

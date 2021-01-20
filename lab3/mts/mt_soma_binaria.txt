@@ -1,0 +1,130 @@
+ATM
+PCS 2302/2024 X+Y, soma 2 numeros binarios  //Felipe Bagni - febagni@usp.br
+1 0 # $   //alfabeto de entrada: $ eh inicio da fita, # eh o separador
+1 0 B # $ Z U C I //alfabeto da fita: B eh branco (default)
+1   //numero de fitas
+1   //numero de trilhas na fita 0
+2   //fita 0 eh infinita nas duas direcoes
+q0  //estado inicial
+q26 //estado final 
+q0 $ q1 $ R //AJUSTE DE # NO FINAL E VOLTA AO INICIO
+q1 0 q1 0 R
+q1 1 q1 1 R
+q1 # q1 # R
+q1 B q2 # L
+q2 0 q2 0 L
+q2 1 q2 1 L
+q2 # q2 # L
+q2 $ q3 $ R
+q3 0 q3 0 R //vai ate o 2o numero
+q3 1 q3 1 R
+q3 # q4 # R
+q4 0 q4 0 R
+q4 1 q4 1 R
+q4 # q5 # L
+q5 Z q5 Z L //EFETUA A SOMA E ESCREVE O RESULTADO AO CONTRARIO
+q5 U q5 U L
+q5 0 q6 Z L
+q5 1 q10 U L
+q5 # q15 # L
+q6 0 q6 0 L
+q6 1 q6 1 L
+q6 # q7 # L
+q7 U q7 U L
+q7 Z q7 Z L
+q7 0 q8 Z R
+q7 # q8 # R
+q7 1 q9 U R
+q8 # q8 # R
+q8 1 q8 1 R
+q8 0 q8 0 R
+q8 Z q8 Z R
+q8 U q8 U R
+q8 B q14 0 L
+q8 I q14 1 L
+q9 # q9 # R
+q9 1 q9 1 R
+q9 0 q9 0 R
+q9 Z q9 Z R
+q9 U q9 U R
+q9 B q14 1 L
+q9 I q13 0 R
+q10 0 q10 0 L
+q10 1 q10 1 L
+q10 # q11 # L
+q11 U q11 U L
+q11 Z q11 Z L
+q11 0 q9 Z R
+q11 # q9 # R
+q11 $ q9 $ R
+q11 1 q12 U R
+q12 # q12 # R
+q12 1 q12 1 R
+q12 0 q12 0 R
+q12 Z q12 Z R
+q12 U q12 U R
+q12 B q13 0 R
+q12 I q13 1 R
+q13 B q14 I L
+q14 0 q14 0 L
+q14 1 q14 1 L
+q14 # q5 # L
+q15 U q15 U L
+q15 Z q15 Z L
+q15 # q16 # R
+q15 $ q16 $ R
+q15 1 q9 U R
+q15 0 q8 Z R
+q16 # q16 # R //ESCREVE O C COMO SEPARADOR E CORRIGE A ORDEM DA RESPOSTA
+q16 1 q16 1 R
+q16 0 q16 0 R
+q16 Z q16 Z R
+q16 U q16 U R
+q16 B q17 C L
+q16 I q16 1 R
+q17 Z q17 Z L
+q17 U q17 U L
+q17 1 q18 U R
+q17 0 q20 Z R
+q17 # q21 # R
+q18 C q18 C R
+q18 1 q18 1 R
+q18 0 q18 0 R
+q18 Z q18 Z R
+q18 U q18 U R
+q18 B q19 1 L
+q19 0 q19 0 L
+q19 1 q19 1 L
+q19 C q17 C L
+q20 C q20 C R
+q20 1 q20 1 R
+q20 0 q20 0 R
+q20 Z q20 Z R
+q20 U q20 U R
+q20 B q19 0 L
+q21 C q21 C R //VOLTA E ESCREVE NA ORDEM CERTA, APAGANDO A RESPOSTA AUXILIAR
+q21 1 q21 1 R
+q21 0 q21 0 R
+q21 Z q21 Z R
+q21 U q21 U R
+q21 B q22 B L
+q22 0 q23 B L
+q22 1 q24 B L
+q22 C q25 B L
+q23 0 q23 0 L
+q23 1 q23 1 L
+q23 C q23 C L
+q23 U q21 0 R
+q23 Z q21 0 R
+q24 0 q24 0 L
+q24 1 q24 1 L
+q24 C q24 C L
+q24 U q21 1 R
+q24 Z q21 1 R
+q25 # q25 # L //VOLTA O CABECOTE PRO COMECO
+q25 1 q25 1 L
+q25 0 q25 0 L
+q25 U q25 1 L
+q25 Z q25 0 L
+q25 $ q26 $ R
+end

@@ -1,0 +1,16 @@
+.
+.pki
+..
+.gnupg
+.profile
+.ICEauthority
+.bash_history
+.bash_logout
+.local
+.ssh
+.bashrc
+.sudo_as_admin_successful
+.cache
+.mozilla
+.config
+.vscode

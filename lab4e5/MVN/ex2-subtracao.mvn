@@ -1,0 +1,44 @@
+; ex2-subtracao.mvn
+;
+;===========================================================================;
+; PROBLEMA:                                                                 ;
+; A subtração de dois inteiros em uma sub-rotina. O programa principal      ;
+; armazena os inteiros nas posições 0x010 (variável x) e 0x012 (variável y) ;
+; e chama a sub-rotina, que deve executar a operação x-y                    ;
+; e armazenar o resultado na posição de memória 0x014.                      ;
+;===========================================================================;
+;
+0000 0016; Ponto de entrada: salto para as instrucoes
+;
+;===========================================================================;
+; Variaveis do programa                                                     ;
+;===========================================================================;
+0010 0010; X = 0x0010 (16)
+0012 0064; Y = 0x0064 (100)
+0014 0000; RESULTADO devera ser 0xFFAC (-84)
+;
+;===========================================================================;
+; Programa principal                                                        ;
+;===========================================================================;
+; Chamando SUBTRAIR(A, B)
+0016 8010; Carrega o valor de X no acumulador
+0018 903C; Armazena no parametro A
+001A 8012; Carrega o valor de Y no acumulador
+001C 903E; Armazena no parametro B
+001E A040; Chama a sub-rotina SUBTRAIR
+0020 9014; Armazena o resultado em RESULTADO
+0022 C022; Para em 0x0022
+;
+;===========================================================================;
+; Sub-rotina SUBTRAIR                                                       ;
+;===========================================================================;
+; Parametros formais
+003C 0000; A
+003E 0000; B
+;
+;===========================================================================
+; Corpo da sub-rotina
+0040 0000; Endereco de retorno
+0042 803C; Carrega o conteudo de A 
+0044 503E; Subtrai B, resultado no ACUMULADOR
+0046 B040; Retorna para o endereco contido em 0x0040

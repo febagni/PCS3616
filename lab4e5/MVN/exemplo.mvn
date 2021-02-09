@@ -1,0 +1,65 @@
+; ===========================================================================
+; Exemplo de entrada e saída (leitura do teclado/escrita no monitor).
+;
+; O programa imprime "X: " na tela e espera o usuário digitar um valor para
+; X, que deve ser uma sequência de dois caracteres quaisquer. Depois, soma 1
+; ao valor de cada um dos bytes lidos e imprime o resultado.
+;
+; Exemplo 1: se o usuário digitar "ab", o programa irá imprimir "bc".
+; Exemplo 2: se o usuário digitar "Zz", o programa irá imprimir "[{".
+; ===========================================================================
+;
+0000 0100  ; Pula para o início das instruções;
+;
+; ===========================================================================
+; Área de dados
+; ===========================================================================
+;
+00F6 0001  ; Constante: 0x001
+00F8 0100  ; Constante: 0x100
+00FA 0000  ; Variável: Byte 1
+00FC 0000  ; Variável: Byte 2
+00FE 0000  ; Variável usada pelo programa principal para guardar o dado lido
+;
+; ===========================================================================
+; Programa
+; Obs: o programa não está otimizado para desempenho, e sim para
+; compreensão da sua lógica. A ordem de algumas operações poderia ser
+; trocada para economizar algumas instruções.
+; ===========================================================================
+;
+; Escrita no monitor
+;
+0100 3058  ; Carrega 'X' no acumulador
+0102 E100  ; Imprime 'X'
+0104 303A  ; Carrega ':' no acumulador
+0106 E100  ; Imprime ':'
+0108 3020  ; Carrega ' ' no acumulador
+010A E100  ; Imprime ' '
+;
+; Leitura do teclado.
+; IMPORTANTE: a leitura sempre é realizada dois bytes por vez!
+;
+010C D000  ; Lê dois bytes do teclado
+010E 90FE  ; Guarda os bytes na memória
+;
+; Separação dos bytes lidos
+;
+0110 60F8  ; Multiplica o valor lido por 0x100
+0112 70F8  ; Divide o valor lido por 0x100
+0114 90FC  ; Armazena o byte na variável "Byte 2"
+0116 80FE  ; Carrega no acumulador o valor lido novamente
+0118 70F8  ; Divide por 0x100
+011A 90FA  ; Armazena na variável "Byte 1"
+;
+; Cálculo e impressão do resultado
+;
+011C 80FA  ; Carrega o 1o. byte
+011E 40F6  ; Soma 1
+0120 E100  ; Imprime
+0122 80FC  ; Carrega o 2o. byte
+0124 40F6  ; Soma 1
+0126 E100  ; Imprime
+0128 0200  ; Pula para a instrução de parada.
+;
+0200 C200  ; The End.

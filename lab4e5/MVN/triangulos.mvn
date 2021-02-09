@@ -1,0 +1,180 @@
+;===============================;
+;   Ex. 1 da PCS3616 - Lab5     ;
+;===============================;
+;   Programa principal          ;
+;===============================;
+
+0000 0100 ; Pula para o início
+;===============================;
+;   Area de Dados               ;
+;===============================;
+
+0010 0000 ; a
+0012 0000 ; b
+0014 0000 ; c
+0016 0000 ; RESULTADO
+
+0018 0000 ; x (maior)
+001A 0000 ; y 
+001C 0000 ; z
+
+001E 0000 ; cte 0x0000
+0020 000F ; cte 0x000F
+0022 0001 ; cte 0x0001
+0024 0002 ; cte 0x0002
+0026 0003 ; cte 0x0003
+;===============================;
+;   Main                        ;
+;===============================;
+
+0100 8010; AC <= a
+0102 9200; parametro m <= a
+0104 8012; AC <= b
+0106 9202; parametro n <= b
+0108 8014; AC <= c
+010A 9204; parametro p <= c
+010C A210; Chama sub-rotina MAIOR
+010E 8206; AC <= maior
+0110 9018; x <= maior
+0112 9300; parametro m2 <= maior
+0114 9400; parametro m3 <= maior
+0116 820A; AC <= lado1
+0118 901A; y <= lado1
+011A 9302; parametro n2 <= lado1
+011C 9402; parametro n3 <= lado1
+011E 820C; AC <= lado2
+0120 901C; z <= lado2
+0122 9304; parametro p2 <= lado2
+0124 9404; parametro p3 <= lado2
+0126 A310; Chama sub-rotina EH TRIANGULO?
+0128 9016; Armazena o resultado em RESULTADO (0x0000 se nao for e 0x000F se for)
+012A 1130; Se RESULTADO = '0', nao eh triangulo e salta para 0x0130
+012C A410; Chama sub-rotina TIPO TRIANGULO
+012E 9016; Armazena o resultado em RESULTADO
+0130 C130; Para em 0x0130
+
+
+;===============================================================;
+;                     Sub-rotina encontra o MAIOR               ;
+;===============================================================;
+;===============================;
+;   Parâmetros                  ;
+;===============================;
+0200 0000 ; m
+0202 0000 ; n
+0204 0000 ; p
+
+;===============================;
+;   Variaveis                   ;
+;===============================;
+0206 0000 ; maior
+020A 0000 ; lado1
+020C 0000 ; lado2
+
+;===============================;
+;   Código                      ;
+;===============================;
+0210 0000 ; Endereco de retorno
+0212 8200 ; AC <= m
+0214 5202 ; AC <= m - n
+0216 223A ; se n>m, vai para 0x023A
+0218 8200 ; AC <= m
+021A 5204 ; AC <= m - p
+021C 222C ; se p>m, p==maior lado, vai para 0x022C
+021E 8200 ; AC<=m (maior lado)
+0220 9206 ; maior<=m
+0222 8202 ; AC<=n
+0224 920A ; lado1<=n
+0226 8204 ; AC<=p
+0228 920A ; lado2<=p
+022A 0240 ; Desvio incondicional para 0x0240
+022C 8204 ; AC<=p (maior lado)
+022E 9206 ; maior <= p
+0230 8202 ; AC<=n
+0232 920A ; lado1<=n
+0234 8200 ; AC<=m
+0236 920A ; lado2<=m
+0238 0240 ; Desvio incondicional para 0x0240
+023A 8204 ; AC <= p
+023C 5202 ; AC <= p - n 
+023E 222E ; se n>p, vai para 0x022E
+0240 022C ; se p>=n, p eh maior e vai para 0x022C
+0242 8202 ; AC<=n (maior lado)
+0246 9206 ; maior <= n
+0248 8200 ; AC<=m
+024A 920A ; lado1<=m
+024C 8204 ; AC<=p
+024E 920A ; lado2<=p
+0240 B210 ; Retorna para o endereco contido em 0x0210
+
+;===============================================================;
+;                     Sub-rotina EH TRIANGULO?                  ;
+;===============================================================;
+;===============================;
+;   Parâmetros                  ;
+;===============================;
+0300 0000 ; m2
+0302 0000 ; n2
+0304 0000 ; p2
+
+;===============================;
+;   Variaveis                   ;
+;===============================;
+0306 0000 ; soma
+
+;===============================;
+;   Código                      ;
+;===============================;
+0310 0000; Endereco de retorno
+0312 8302; AC<=n2 
+0314 4304; AC<=n2+p2 
+0316 9306; soma<=n2+p2 
+0318 8300; AC<=m2 
+031A 5306; AC<=m2-soma 
+031C 2322; se m<soma eh triangulo e desvia para 0x0322
+031E 801E; AC<=0 (cte)
+0320 0324; Desvio incondicional para 0x0324
+0322 8020; AC<=F (cte)
+0324 B310; Retorno para o endereco contido em 0x0310
+
+;===============================================================;
+;                     Sub-rotina TIPO TRIANGULO                 ;
+;===============================================================;
+;===============================;
+;   Parâmetros                  ;
+;===============================;
+0400 0000 ; m3
+0402 0000 ; n3
+0404 0000 ; p3
+
+;===============================;
+;   Variaveis                   ;
+;===============================;
+0406 0000 ; m3^2
+0408 0000 ; n3^2
+040A 0000 ; p3^2
+040C 0000 ; (n3^2 + p3^2)
+;===============================;
+;   Código                      ;
+;===============================;
+0410 0000; Endereco de retorno
+0412 8400; AC<=m3
+0414 6400; AC<= m3*m3 
+0416 9406; m3^2 <= m3*m3
+0418 8402; AC<=n3
+041A 6402; AC<= n3*n3 
+041C 9408; n3^2 <= n3*n3
+041E 8404; AC<=p3
+0420 6404; AC<= p3*p3 
+0422 940A; p3^2 <= p3*p3
+0424 4408; AC<=p3^2(ja estava em AC) + n3^2
+0426 940C; (n3^2 + p3^2) <= AC
+0428 5406; AC<=(n3^2 + p3^2) - m3^2
+042A 1432; se (n3^2 + p3^2)=m3^2, triangulo retangulo (1) e pula para 0x0432
+042C 2436; se (n3^2 + p3^2)<m3^2, triangulo obtusangulo (3) e pula para 0x0436
+042E 8024; se (n3^2 + p3^2)>m3^2, triangulo acutangulo (2) e AC<=2 (cte)
+0430 0438; salto incondicional para 0x0438
+0432 8022; AC<=1(cte)
+0434 0438; salto incondicional para 0x0438
+0436 8026; AC<=3(cte)
+0438 B410; Retorno para o endereco contido em 0x0410

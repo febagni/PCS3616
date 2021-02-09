@@ -1,0 +1,28 @@
+; ex1-soma.mvn
+;===========================================================================;
+; PROBLEMA:                                                                 ;
+; Soma o valor das posições de memória 0x010 e 0x012                        ;
+; e armazena o resultado na posição 0x014. As parcelas da                   ;
+; soma devem ser -111 e 333 (usar representação em complemento de 2).       ;
+;===========================================================================;
+;
+0000 0016; Ponto de entrada: salto para as instrucoes
+;
+;===========================================================================;
+; Constantes do programa                                                    ;
+;===========================================================================;
+0010 FF91; A = 0xFF91 (-111)
+0012 014D; B = 0x014D (333)
+;
+;===========================================================================;
+; Variaveis do programa                                                     ;
+;===========================================================================;
+0014 0000; RESULTADO devera ser 0x00DE
+;
+;===========================================================================;
+; Instrucoes do programa                                                    ;
+;===========================================================================;
+0016 8010; Carrega o valor de A no acumulador
+0018 4012; Adiciona B ao conteudo do acumulador
+001A 9014; Armazena o resultado em RESULTADO
+001C C01C; Para em 0x001C

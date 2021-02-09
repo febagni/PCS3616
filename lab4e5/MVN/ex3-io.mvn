@@ -1,0 +1,116 @@
+; ex3-io.mvn
+; ===========================================================================
+; Exemplo de entrada e saída (leitura do teclado/escrita no monitor).
+;
+; O programa imprime "X: " na tela e espera o usuário digitar um valor para
+; X, que deve ser uma sequência de dois caracteres quaisquer. Depois, soma 1
+; ao valor de cada um dos bytes lidos e imprime o resultado.
+;
+; Exemplo 1: se o usuário digitar "ab", o programa irá imprimir "bc".
+; Exemplo 2: se o usuário digitar "Zz", o programa irá imprimir "[{".
+; ===========================================================================
+;
+0000 010C  ; Pula para o início das instruções;
+;
+; ===========================================================================
+; Área de dados
+; ===========================================================================
+;
+00F4 0030  ; 30 (char 0)
+00F6 000A  ; Constante: 0x00A (10 em decimal)
+00F8 0100  ; Constante: 0x100
+00FA 0000  ; Variável: x
+00FC 0000  ; Variável: y
+00FE 0000  ; Variável usada pelo programa principal para guardar o dado lido
+0100 0000  ; 
+0102 0000  ; 
+;
+; ===========================================================================
+;
+; Leitura do teclado.
+; IMPORTANTE: a leitura sempre é realizada dois bytes por vez!
+;
+010C D000  ; Lê dois bytes do teclado (conteudo de x)
+010E 90FA  ; Guarda os bytes na memória (variavel x)
+0110 D000  ; Lê dois bytes do teclado (espacos em branco)
+0112 D000  ; Lê dois bytes do teclado (conteudo de y)
+0114 90FC  ; Guarda os bytes na memória (variavel y)
+0116 9200  ; passa como y como parâmetro para a subrotina 1  
+0118 A206  ; chama a subrotina 1
+011A 90FC  ; salva o resultado em Y
+011C 80FA  ; Carrega X no AC 
+011E 9200  ; passa como x como parâmetro para a subrotina 1
+0120 A206  ; chama a subrotina 1
+0122 50FC  ; Subtrai Y do AC ------
+0124 9100  ; Carrega o resultado como parametro da hex_to_char
+0126 A106  ; chama a subrotina hex_to_char
+0128 900A  ; Salva o resultado em X
+012A E100  ; Imprime o resultado
+012C C12C  ; Paraem 0x012C
+;
+;
+;===============================================================;
+;Subrotina 1 -> de conversao do char da ASCII para hex          ;
+;===============================================================;
+;
+; Parâmetros                  
+0200 0000 ; char c
+;
+;===============================;
+; Variáveis                   
+0202 0000 ; c1 = char1
+0204 0000 ; c0 = char0
+;
+;===============================;
+; Código                      
+0206 0000 ; Endereço de retorno
+0208 8200 ; AC = c
+;
+;c0 = c << 2 >> 2 - 30
+020A 60F8 ; Multiplica o valor lido por 0x100 -> AC = AC << 2
+020C 70F8 ; Divide o valor lido por 0x100 -> AC = AC >> 2
+020E 50F4 ; AC = AC - 30
+0210 9204 ; Armazena AC na variável C0
+;
+;c1 = c >> 2 - 30
+0212 8200 ; AC = c
+0214 70F8 ; AC = AC >> 2
+0216 50F4 ; AC = AC - 30
+0218 9202 ; c1 = AC
+;
+021A 60F6 ; AC = c1*10
+021C 4204 ; AC += c0
+021E B206 ; Retorna para o endereço
+;
+;
+;
+;===============================================================;
+;Subrotina 2 -> hex_to_char   (processo inverso da subrotina 1) ;
+;===============================================================;
+;
+; Parâmetros                  
+0300 0000 ; parâmetro int X
+;
+;===============================;
+; Variáveis                   
+0302 0000 ; b1 = Byte 1 de X
+0304 0000 ; b0 = Byte 0 de X
+
+;===============================;
+;   Código                      ;
+;===============================;
+0306 0000 ; Endereço de retorno
+0308 8300 ; Carrega o conteúdo de X
+
+;Salva o primeiro byte b0
+030A 60F8 ; Multiplica por 0x0100, resultado no AC
+030C 70F8 ; Divide por 0x0100, resultado no AC
+030E 9304 ; b0 recebe os primeiros dois bytes de X
+
+;Converte b0 em char
+0310 8304 ; Carrega b0 no AC
+0312 9200 ; byte_to_char(x = b0)
+0314 A206 ; chama a subrotina
+0316 B306 ; Retorna o resultado para 0x0106
+
+

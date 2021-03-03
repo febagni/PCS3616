@@ -1,0 +1,165 @@
+;===============================;
+;   Ex. 2 da PCS3616 - Lab5     ;
+;===============================;
+;   Programa principal          ;
+;===============================;
+;
+0000 0300 ; Pula para o início
+;===============================;
+;   Area de Dados               ;
+;===============================;
+;
+0010 0001 ; OPCODE n (0 <= n <= 15)
+0012 0000 ; MNEM mnemonico
+;
+0020 4A50; cte JP (ASCII)
+0022 4A5A; cte JZ (ASCII)
+0024 4A4E; cte JN (ASCII)
+0026 4C56; cte LV (ASCII)
+0028 4144; cte AD (ASCII)
+002A 5342; cte SB (ASCII)
+002C 4D4C; cte ML (ASCII)
+002E 4456; cte DV (ASCII)
+0030 4C44; cte LD (ASCII)
+0032 4D4D; cte MM (ASCII)
+0034 5343; cte SC (ASCII)
+0036 5253; cte RS (ASCII)
+0038 484D; cte HM (ASCII)
+003A 4744; cte GD (ASCII)
+003C 5044; cte PD (ASCII)
+003E 4F53; cte OS (ASCII)
+;
+0040 0000; cte 0x000
+0042 0001; cte 0x001
+0044 0002; cte 0x002
+0046 0003; cte 0x003
+0048 0004; cte 0x004
+004A 0005; cte 0x005
+004C 0006; cte 0x006
+004E 0007; cte 0x007
+0050 0008; cte 0x008
+0052 0009; cte 0x009
+0054 000A; cte 0x00A
+0056 000B; cte 0x00B
+0058 000C; cte 0x00C
+005A 000D; cte 0x00D
+005C 000E; cte 0x00E
+005E 000F; cte 0x00F
+;
+0060 0020; cte offset endereco
+0062 8000; cte para operacao de load do endereco do mnemonico
+;
+;===============================================================;
+;                     Sub-rotina OP2MNEM                        ;
+;===============================================================;
+;===============================;
+;   Código                      ;
+;===============================;
+0100 0000; Carrega endereco de retonro
+0102 8010; AC<= OPCODE
+0104 4010; AC<=OPCODE+OPCODE=2*OPCODE = address do opcode
+0106 4060; AC<= address(OPCODE) + offset(=0x020)
+0108 4062; AC<= OPERACAO LOAD do endereco do MNEM
+010A 910C; Carrega o operacao de load do endereco do mnemonico para enderco 0x010C
+010C 0000; Contem a operacao de load do mnemonico para AC
+010E 9012; Armazena resultado em MNEM (0x012)
+0110 B100; Retorna para endereco de 0x100
+;
+;===============================================================;
+;                     Sub-rotina MNEM2OP                        ;
+;===============================================================;
+;===============================;
+;   Código                      ;
+;===============================;
+0200 0000; Endereco de retorno
+0202 8012; AC <= MNEM
+0204 5020; AC <= MNEM - JP
+0206 1262; Se MNEM=JP, JUMP para 0x262
+0208 8012; AC <= MNEM
+020A 5022; AC <= MNEM - JZ
+020C 1266; Se MNEM=JZ, JUMP para 0x266
+020E 8012; AC <= MNEM
+0210 5024; AC <= MNEM - JN
+0212 126A; Se MNEM=JN, JUMP para 0x26A
+0214 8012; AC <= MNEM
+0216 5026; AC <= MNEM - LV
+0218 126E; Se MNEM=LV, JUMP para 0x26E
+021A 8012; AC <= MNEM
+021C 5028; AC <= MNEM - AD
+021E 1272; Se MNEM=AD, JUMP para 0x272
+0220 8012; AC <= MNEM
+0222 502A; AC <= MNEM - SB
+0224 1276; Se MNEM=SB, JUMP para 0x276
+0226 8012; AC <= MNEM
+0228 502C; AC <= MNEM - ML
+022A 127A; Se MNEM=ML, JUMP para 0x27A
+022C 8012; AC <= MNEM
+022E 502E; AC <= MNEM - DV
+0230 127E; Se MNEM=DV, JUMP para 0x27E
+0232 8012; AC <= MNEM
+0234 5030; AC <= MNEM - LD
+0236 1282; Se MNEM=LD, JUMP para 0x282
+0238 8012; AC <= MNEM
+023A 5032; AC <= MNEM - MM
+023C 1286; Se MNEM=MM, JUMP para 0x286
+023E 8012; AC <= MNEM
+0240 5034; AC <= MNEM - SC
+0242 128A; Se MNEM=SC, JUMP para 0x28A
+0244 8012; AC <= MNEM
+0246 5036; AC <= MNEM - RS
+0248 128E; Se MNEM=RS, JUMP para 0x28E
+024A 8012; AC <= MNEM
+024C 5038; AC <= MNEM - HM
+024E 1292; Se MNEM=HM, JUMP para 0x292
+0250 8012; AC <= MNEM
+0252 503A; AC <= MNEM - GD
+0254 1296; Se MNEM=GD, JUMP para 0x296
+0256 8012; AC <= MNEM
+0258 503C; AC <= MNEM - PD
+025A 129A; Se MNEM=PD, JUMP para 0x29A
+025C 8012; AC <= MNEM
+025E 503E; AC <= MNEM - OS
+0260 129E; Se MNEM=OS, JUMP para 0x29E
+0262 8020; AC<=0x0000 (OPCODE=0)
+0264 02A0; Salto incondicional para 0x2A0
+0266 8022; AC<=0x0001 (OPCODE=1)
+0268 02A0; Salto incondicional para 0x2A0
+026A 8024; AC<=0x0002 (OPCODE=2)
+026C 02A0; Salto incondicional para 0x2A0
+026E 8026; AC<=0x0003 (OPCODE=3)
+0270 02A0; Salto incondicional para 0x2A0
+0272 8028; AC<=0x0004 (OPCODE=4)
+0274 02A0; Salto incondicional para 0x2A0
+0276 802A; AC<=0x0005 (OPCODE=5)
+0278 02A0; Salto incondicional para 0x2A0
+027A 802C; AC<=0x0006 (OPCODE=6)
+027C 02A0; Salto incondicional para 0x2A0
+027E 802E; AC<=0x0007 (OPCODE=7)
+0280 02A0; Salto incondicional para 0x2A0
+0282 8030; AC<=0x0008 (OPCODE=8)
+0284 02A0; Salto incondicional para 0x2A0
+0286 8032; AC<=0x0009 (OPCODE=9)
+0288 02A0; Salto incondicional para 0x2A0
+028A 8034; AC<=0x000A (OPCODE=A)
+028C 02A0; Salto incondicional para 0x2A0
+028E 8036; AC<=0x000B (OPCODE=B)
+0290 02A0; Salto incondicional para 0x2A0
+0292 8038; AC<=0x000C (OPCODE=C)
+0294 02A0; Salto incondicional para 0x2A0
+0296 803A; AC<=0x000D (OPCODE=D)
+0298 02A0; Salto incondicional para 0x2A0
+029A 803C; AC<=0x000E (OPCODE=E)
+029C 02A0; Salto incondicional para 0x2A0
+029E 803E; AC<=0x000F (OPCODE=F)
+02A0 9010; Armazena resultado em OPCODE (0x010)
+02A2 B200; Retorna para endereco de 0x200
+;
+;===============================;
+;   Main                        ;
+;===============================;
+;
+0300 A100; Chama a subrotina OP2MNEM
+0302 9012; Armazena resultado em MNEM (0x012)
+0304 A200; Chama a subrotina MNEM2OP
+0306 9010; Armazena resultado em OPCODE (0x010)
+0308 C308; Para em 0x0130

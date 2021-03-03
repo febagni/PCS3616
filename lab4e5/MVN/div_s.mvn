@@ -1,0 +1,95 @@
+;===============================;
+;   Ex. 1 da PCS3616 - Lab6     ;
+;===============================;
+;   Programa principal          ;
+;===============================;
+;
+0000 00FC ; Pula para o início
+;===============================;
+;   Area de Dados               ;
+;===============================;
+;
+0010 FFFB ; a = dividendo (pode ser negativo)
+0012 0004 ; b = divisor
+0014 0000 ; q = quociente
+0016 0000 ; r = resto
+0018 0000 ; aux = q * b
+001A 0000 ; i = contador
+0020 0000 ; a_temp1
+0022 0000 ; a_temp2
+
+;===============================;
+;   Constantes                  ;
+;===============================;
+;
+0050 0001 ; cte 0x0001
+0052 FFFF ; cte 0xFFFF 
+;
+;===============================;
+;   Main                        ;
+;===============================;
+;
+00FC 8010; AC <= a
+00FE 9020; a_temp1 <= a
+0100 9022; a_temp2 <= a
+0102 210A; Desvio se a < 0
+0104 A200; Sub-rotina QUOCIENTE 
+0106 A300; Sub-rotina RESTO
+0108 0116; Jump para a correcao de sinais  
+010A 8052; AC <= 0xFFFF
+010C 5010; AC <= 0xFFFF - a
+010E 4050; AC <= AC + 1
+0110 9020; a_temp1 <= |a|
+0112 9022; a_temp2 <= |a|
+0114 0104; Jump pras realizar as subrotinas
+0116 8010; AC <= a
+0118 211C; Desvio se a < 0
+011A C11A; Para em 0x011A.
+011C 8014; AC <= q
+011E 1128; Jump se q==0
+0120 6052; AC <= -q
+0122 9014; q <= AC
+0124 8016; AC <= r 
+0126 1134; Se r==0, jump para 0x134
+0128 6052; AC <= -r
+012A 4012; AC <= (-r) + b
+012C 9016; r <= AC
+012E 8014; AC <= q
+0130 5050; AC <= q - 1
+0132 9014; q <= AC
+0134 011A; Jump pro fim
+
+
+;===============================================================;
+;                     Sub-rotina QUOCIENTE                      ;
+;===============================================================;
+;===============================;
+;   Código                      ;
+;===============================;
+0200 0000; Carrega endereco de retorno
+0202 8020; AC<= a_temp1 
+0204 5012; AC <= a_temp1 - b 
+0206 2214; Desvio se (a_temp1-b) < 0
+0208 9020; a_temp1 <= a_temp1 - b
+020A 801A; AC <= i 
+020C 4050; AC <= i + 1
+020E 901A; i <= AC
+0210 9014; q <= AC
+0212 0202; Jump pro laco
+0214 B200; Retorna para endereco de 0x200
+
+
+;===============================================================;
+;                     Sub-rotina RESTO                          ;
+;===============================================================;
+;===============================;
+;   Código                      ;
+;===============================;
+0300 0000; Carrega endereco de retorno
+0302 8014; AC<= q 
+0304 6012; AC <= q*b 
+0306 9018; aux <= AC (q*b)
+0308 8022; AC <= a_temp2 
+030A 5018; AC <= a_temp2 - (q*b)
+030C 9016; r <= AC
+030E B300; Retorna para endereco de 0x300

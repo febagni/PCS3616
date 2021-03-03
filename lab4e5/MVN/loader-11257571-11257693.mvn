@@ -1,0 +1,68 @@
+;===============================;
+;        PCS3616 - Lab7         ;
+;===============================;
+;   Programa principal          ;
+;===============================;
+;
+0B00 0B60; Pula para endereco inicial do Programa
+;===============================;
+;   Area de Dados               ;
+;===============================;
+;
+0B10 0000; Endereco inicial
+0B12 0000; Checksum
+0B14 0000; Comprimento
+0B16 0000; Faltam (numero de palavras que faltam ser lida no bloco)
+0B18 0080; NWORDS (=128 palavras)
+0B1A 0000; MyChecksum
+;
+;===============================;
+;   Constantes                  ;
+;===============================;
+;
+0B50 0002; cte 0x0002
+0B52 9000; instrucao MM
+0B54 0001; cte 0x0001
+0B56 0000; cte 0x0000
+;
+;===============================;
+;   Main                        ;
+;===============================;
+;
+0B60 D300; AC <= Le 2 bytes (endereco)
+0B62 9B10; Endereco inicial <= AC
+0B64 4B1A; AC <= MyChecksum + endereco 
+0B66 9B1A; MyChecksum <= AC
+0B68 D300; AC <= Le 2 bytes (Comprimento)
+0B6A 9B14; Comprimento <= AC
+0B6C 9B16; Faltam <= AC
+0B6E 4B1A; AC <= MyChecksum + comprimento 
+0B70 9B1A; MyChecksum <= AC
+0B72 8B16; AC <= Faltam
+0B74 1B92; Jump se AC==0, para verificacao do Checksum
+0B76 8B52; AC <= 9000 (MM)
+0B78 4B10; AC <= Instr de LD do endereco em 0xB10
+0B7A 9B7E; Guarda a instrucao em 0xB7E
+0B7C D300; AC<= Le 2 bytes (palavra da mem)
+0B7E 0000; Load da palavra na posicao da mem
+0B80 4B1A; AC <= MyChecksum + palavra da mem
+0B82 9B1A; MyChecksum <= AC
+0B84 8B16; AC <= Faltam
+0B86 5B54; AC <= Faltam - 1
+0B88 9B16; Faltam <= AC
+0B8A 8B10; AC <= Endereco
+0B8C 4B50; AC <= Endereco + 2
+0B8E 9B10; Endereco <= AC
+0B90 0B72; Jump para 0xB72
+0B92 D300; AC <= Le 2 bytes (Checksum)
+0B94 9B12; Checksum <= AC
+0B96 5B1A; AC <= Checksum - MyChecksum
+0B98 1B9C; Se estiver correto, JUMP para 0xB9C
+0B9A 0BA8; Jump para fim do programa
+0B9C 8B56; AC <= 0x000
+0B9E 9B1A; MyChecksum <= AC
+0BA0 8B14; AC <= Comprimento
+0BA2 5B18; AC <= Comprimento - NWORDS
+0BA4 2BA8; Jump se AC negativo (acabou de ter sido o ultimo bloco)
+0BA6 0B60; Jump para 0xB60
+0BA8 CBA8; Fim de execucao

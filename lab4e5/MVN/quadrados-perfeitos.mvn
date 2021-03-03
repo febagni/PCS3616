@@ -1,0 +1,64 @@
+;===============================;
+;   Ex. 3 da PCS3616 - Lab5     ;
+;===============================;
+;   Programa principal          ;
+;===============================;
+;
+0000 0400 ; Pula para o início
+;===============================;
+;   Area de Dados               ;
+;===============================;
+;
+0010 0000; n
+0012 0000; n^2
+0014 0100; endereco
+;
+;
+0020 0000; cte 0x000
+0022 0001; cte 0x001
+0024 0002; cte 0x002
+0026 0040; cte 0x040 (64)
+;
+0030 9000; operacao de LOAD
+;
+;
+;===============================================================;
+;                     Sub-rotina QUADRADO PERFEITO              ;
+;===============================================================;
+;===============================;
+;   Código                      ;
+;===============================;
+0300 0000; Carrega endereco de retorno
+0302 8010; AC<= n
+0304 132E; Se n eh zero, PULA para 0x32E
+0306 5026; AC<= n - 64 (0x40)
+0308 1334; Se n = 64, PULA para 0x334
+030A 8010; AC<= n
+030C 5022; AC<= n-1
+030E 6024; AC <= (n-1)*2
+0310 4022; AC <= (2*(n-1))+1
+0312 4012; AC <= [(2*(n-1))+1] + n^2 (das somas anteriores)
+0314 9012; Atualiza valor de n^2 (endereco 0x012)
+0316 8014; AC<=endereco atual
+0318 4030; AC<= instrucao de load do AC pra memoria no endereco atual
+031A 931E; Joga a instrucao pro endereco 0x31E
+031C 8012; AC <= n^2
+031E 0000; Poe o n^2 no endereco correspondente
+0320 8010; AC<= n
+0322 4022; AC<= n+1
+0324 9010; n<=n+1
+0326 8014; AC<=endereco
+0328 4024; AC<=endereco+2
+032A 9014; endereco<=endereco+2
+032C 0302; Volta para 0x302
+032E 8020; AC<=0 (0x0)
+0330 9012; n^2<=0
+0332 0316; PULA para 0x0316
+0334 B300; Volta para endereco contido em 0x300
+;
+;===============================;
+;   Main                        ;
+;===============================;
+;
+0400 A300; Chama a subrotina QUADRADO PERFEITO
+0402 C402; Para em 0x402
